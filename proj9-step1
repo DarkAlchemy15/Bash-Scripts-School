@@ -17,7 +17,13 @@ fi
 
 while [[ -z $othr ]] ;do
     echo "'$othr' was left blank so it was set to 0"
+    othr=0
 done
-
+    ###### Calculate Pay ######
 regpay=$(echo -e "scale=2;$rate*$reghr" | bc )
-otpay=$(echo -e "scale=2;$rate*$othr*1.5 | bc)
+otpay=$(echo -e "scale=2;$rate*$othr*1.5 | bc )
+total=$(echo -e "scale=2;$regpay+$otpay" | bc )
+
+    ###### Output ######
+echo -e "Employee ID: $emID   Name: $lname, $fname"
+echo -e "Rate: \$$rate,  Regular pay: \$$regpay,  Overtime pay: \$$otpay,  Total: $total"
