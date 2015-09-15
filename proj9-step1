@@ -1,0 +1,23 @@
+#!/bin/bash
+#Proj9 Payroll step1
+
+echo -e "###############
+Enter info:
+$> <enployee ID> <Fname> <Lname> <rate> <reg hrs> <OT hrs>
+#################################"
+
+if [ $# -ge 5 ];then
+    emID=$1
+    fname=$2
+    lname=$3
+    rate=$4
+    reghr=$5
+    othr=$6
+fi
+
+while [[ -z $othr ]] ;do
+    echo "'$othr' was left blank so it was set to 0"
+done
+
+regpay=$(echo -e "scale=2;$rate*$reghr" | bc )
+otpay=$(echo -e "scale=2;$rate*$othr*1.5 | bc)
