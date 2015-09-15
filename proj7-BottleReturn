@@ -1,0 +1,86 @@
+#!/bin/bash
+
+if [ $# -ge 1 ];then
+        echo -e "\n\tUsing commandline parameters."
+        name=$1
+        fcase=$2
+        pcase=$3
+else
+        ###### Input ######
+echo -e "\n\tUsing interactive mode."
+echo -e "Enter customers name: \c"
+read name
+echo -e "Number full cases: \c"
+read fcase
+echo -e "Number of bottles in last case: \c"
+read pcase
+fi
+
+################## Data Valitation ####################
+
+        #### Making sure a name was entered #####
+while [ -z $name ];do
+        echo -e "\nPlease enter customer's name: \c"
+        read name
+done
+
+        ####### Makes sure everything is Okie Dokie before moving on #######
+until  [ ! -z $fcase -a $fcase -eq $fcase -a ! -z $pcase -a $pcase -eq $pcase ]                                                                                                                                                              2>/dev/null;do
+                #### Making sure it wasn't left blank ###
+        while [ -z $fcase ];do
+                echo -e "\nEnter # of full cases: \c "
+                read fcase
+        done
+
+                ##### Making sure Full cases is a number ####
+        until [ $fcase -eq $fcase ] 2>/dev/null;do
+                echo -e "\n'$fcase' is not a number."
+                echo -e "Please enter a '#' for full cases: \c"
+                read fcase
+        done
+
+                ###### Making sure it wasn't left blank ######
+        while [ -z $pcase ];do
+                echo -e "\nNumber of bottles in the last case: \c"
+                read pcase
+        done
+
+                ######## Making sure pcase is a number #######
+        until [  $pcase -eq $pcase ] 2>/dev/null;do
+                echo -e "\n'$pcase' is not a number. "
+                echo -e "Number of bottles in last case: \c"
+                read pcase
+        done
+done
+
+##################### Calculations #######################
+
+        ###### Checking to see if pcase is over 10 if #######
+        ###### so then devide by 10, and add the ans  #######
+        ###### to Fullcase. Set remainder to pcase    #######
+if [ $pcase -gt 10 ]
+then
+        overflow=$(echo "$pcase/10" | bc )
+        pcase=$(echo "$pcase%10" | bc )
+        fcase=$(echo "$fcase+$overflow" | bc )
+fi
+        ###### If pcase has 5 or more bottles  ######
+        ###### it counts as a full case        ######
+if [ $pcase -ge 5 ]
+then
+        fcase=$(echo "$fcase+1" | bc )
+fi
+
+        ###### If you bring in 8 or more you get $4.00 per case ######
+        ###### If you bring in 7 or less you get $3.00 per caes ######
+if [ $fcase -ge 8 ]
+then
+        total=$(echo "$fcase*4.00" | bc )
+else
+        total=$(echo "$fcase*3.00" | bc)
+fi
+
+echo -e "\n\tCustomer: $name"
+echo -e "\tNumber of cases counted as full: $fcase "
+echo -e "\tNumber of leftover bottles: $pcase"
+echo -e "\tCredited amount: \$$total"
