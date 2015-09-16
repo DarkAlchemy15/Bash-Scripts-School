@@ -1,5 +1,19 @@
 #!/bin/bash
 
+echo -e "\n\t #####################################################
+\t# Bottle return script:                               #
+\t# 10 bottles per case, if you put a number greater    #
+\t# than 10 in the last field it will flow over to      #
+\t# the full case amount.                               #
+\t# \$3.00 per cases for 7 or less casses. \$4.00         #
+\t# percase for 8 or more casses.                       #
+\t#                                                     #
+\t# Usage:                                              #
+\t#	Interactive mode.                             #
+\t# 	command line parameters:                      #
+\t# $> [Customer Name] [Full cases] [remaining bottles] #
+\t #####################################################"
+
 if [ $# -ge 1 ];then
         echo -e "\n\tUsing commandline parameters."
         name=$1
@@ -19,7 +33,7 @@ fi
 ################## Data Valitation ####################
 
         #### Making sure a name was entered #####
-while [ -z $name ];do
+while [ -z $name ] 2>/dev/null;do
         echo -e "\nPlease enter customer's name: \c"
         read name
 done
@@ -58,7 +72,7 @@ done
         ###### Checking to see if pcase is over 10 if #######
         ###### so then devide by 10, and add the ans  #######
         ###### to Fullcase. Set remainder to pcase    #######
-if [ $pcase -gt 10 ]
+if [ $pcase -ge 10 ]
 then
         overflow=$(echo "$pcase/10" | bc )
         pcase=$(echo "$pcase%10" | bc )
@@ -70,7 +84,6 @@ if [ $pcase -ge 5 ]
 then
         fcase=$(echo "$fcase+1" | bc )
 fi
-
         ###### If you bring in 8 or more you get $4.00 per case ######
         ###### If you bring in 7 or less you get $3.00 per caes ######
 if [ $fcase -ge 8 ]
