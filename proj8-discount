@@ -1,0 +1,61 @@
+#!/bin/bash 
+# Proj8 pt2 Discount 
+ 
+    ###### List Discount codes ######
+echo -e "\n\tPrice code \tDiscount Rate"u 
+echo -e "\th \t50%" 
+echo -e "\tf \t40%" 
+echo -e "\tt \t33%" 
+echo -e "\tq \t25%" 
+echo -e "\tz \t0% No Discount" 
+
+    ###### Start loop ###### 
+ans=true 
+while [ $ans == true ] ;do 
+    ####### Input ######
+        echo -e "\nEnter price of item: \c" 
+        read item 
+    ###### add option to exit ######
+         case $item 
+                in 
+                quit)exit;; 
+        esac 
+    ###### Data valadation ######
+        while [[ $item =~ [a-z] ]] || [ -z $item ] ;do 
+                echo -e "'$item' is not a number!" 
+                echo -e "Please enter price of item: \c" 
+                read item 
+                case $item 
+                        in 
+                        quit)exit;; 
+                esac 
+        done 
+         echo -e "Enter discount code: \c" 
+        read discount 
+    ###### This was my first attempt for calculation, then i moved them to the case statment #####
+#off50=$(echo "$item-$item*.50" | bc ) 
+#off40=$(echo "$item-$item*.40" | bc) 
+#off33=$(echo "$item-$item*.33" | bc) 
+#off25=$(echo "$item-$item*.25" | bc) 
+        
+        ###### Data valadation w/ a quit option (Discount) ######
+        while [[ ! $discount == [hftqz] ]] ; do 
+                echo "'$discount' was not an option!" 
+                echo -e "Please choose h, f, t, q, or z: \c" 
+                read discount 
+                case $discount 
+                        in 
+                        quit)exit;; 
+                esac 
+        done 
+        case $discount 
+                in 
+                h)echo "Original price: \$$item, Discounted 50% is \$$(echo "$item-$item*.50" | bc )";; 
+                f)echo "Original price: \$$item, Discounted 40% is \$$(echo "$item-$item*.40" | bc)";; 
+                t)echo "Original price: \$$item, Discounted 33% is \$$(echo "$item-$item*.33" | bc)";; 
+                q)echo "Original price: \$$item, Discounted 25% is \$$(echo "$item-$item*.25" | bc)";; 
+                z)echo "Original price: \$$item, No Discount. Item is \$$item";; 
+                quit)exit;; 
+                *)echo "Not a discount code, try again!" 
+        esac 
+done
