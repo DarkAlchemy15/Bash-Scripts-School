@@ -1,0 +1,151 @@
+#!/bin/bash 
+ 
+ 
+#Andrew Lovato Proj8 TaxRate 
+ 
+ 
+echo -e "\n######################################################### 
+# TaxRate will add up upto 5 items and tell you the     # 
+# price before and after tax, and the tax amount.       # 
+# If you leave an item blank then it's considered \$0.00 # 
+# Usage:                                                # 
+#       Interactive mode.                               # 
+#       Commandline parameters                          # 
+# $> [taxrate] [item1] [item2] [item3] [item4] [item5]  # 
+#########################################################" 
+        ####### Reapeat? ###### 
+ans=true 
+while [ $ans == true ] ;do 
+ 
+ 
+        ###### Input ###### 
+        if [ $# -ge 2 ];then 
+                taxrate=$1 
+                item1=$2 
+                item2=$3 
+                item3=$4 
+                item4=$5 
+                item5=$6 
+        else 
+ 
+ 
+                echo -e "\nEnter tax percentage: \c" 
+                read taxrate 
+                echo -e "Enter price for item 1: \c" 
+                read item1 
+                echo -e "Enter price for item 2: \c" 
+                read item2 
+                echo -e "Enter price for item 3: \c" 
+                read item3 
+                echo -e "Enter price for item 4: \c" 
+                read item4 
+                echo -e "Enter price for item 5: \c" 
+                read item5 
+        fi 
+ 
+ 
+        ###### Data Validation ###### 
+#until [ $taxrate -eq  $taxrate ];do 
+#       echo -e "Please enter a number for Tax: \c" 
+#       read taxrate 
+#done 
+        echo -e "\nBefore tr: $taxrate" 
+        taxrate=$(echo "$taxrate" | tr -d [:alpha:] ) 
+        echo "After tr: $taxrate" 
+ 
+ 
+        until [ $item1 -eq $item1  ];do 
+                echo -e "Please enter a nmuber for item1: \c" 
+                read item1 
+        done 
+ 
+ 
+        until [ $item2 -eq $item2  ];do 
+                echo -e "Please enter a nmuber for item2: \c" 
+                read item2 
+        done 
+ 
+ 
+        until [ $item3 -eq $item3 ];do 
+                echo -e "Please enter a nmuber for item3: \c" 
+                read item3 
+        done 
+ 
+ 
+        until [ $item4 -eq $item4  ];do 
+                echo -e "Please enter a nmuber for item4: \c" 
+                read item4 
+        done 
+ 
+ 
+        until [ $item5 -eq $item5  ];do 
+                echo -e "Please enter a nmuber for item5: \c" 
+                read item5 
+        done 
+ 
+ 
+        until [ ! -z $item1 -o ! -z $item2 -o ! -z $item3 -o ! -z $item4 -o ! -z $item5 -o ! -z $taxrate  ] 2>/dev/null;do 
+ 
+ 
+                if [ -z $taxrate ];then 
+                        taxrate=0 
+                fi 
+                if [ -z $item1 ];then 
+                        item1=0 
+                fi 
+                if [ -z $item2 ];then 
+                        item2=0 
+                fi 
+                if [ -z $item3 ];then 
+                        item3=0 
+                fi 
+                if [ -z $item4 ];then 
+                        item4=0 
+                fi 
+                if [ -z $item5 ];then 
+                        item5=0 
+                fi 
+        done 
+ 
+ 
+ 
+ 
+        ###### Output ###### 
+        echo -e "\nTax rate: $taxrate%" 
+        echo -e "Price1: \$$item1" 
+        echo -e "Price2: \$$item2" 
+        echo -e "Price3: \$$item3" 
+        echo -e "Price4: \$$item4" 
+        echo -e "Price5: \$$item5" 
+ 
+ 
+        ###### Calculation ###### 
+        subtotal=$(echo "scale=2;$item1+$item2+$item3+$item4+$item5*1.00" | bc ) 
+#       tax=$(echo "scale=4;$taxrate/100" | bc ) 
+        echo "Tax: $taxrate%" 
+        tax2=$(echo "scale=2;$subtotal*$taxrate/100" | bc ) 
+        echo -e "Tax2: $tax2" 
+        total=$(echo "$subtotal+$tax2" | bc ) 
+ 
+ 
+        ###### Output ###### 
+        echo -e "\nSubtotal: \$$subtotal" 
+        echo -e "Tax:\$$tax2" 
+        echo -e "Total: \$$total" 
+ 
+ 
+ 
+ 
+        ###### Repeat? ###### 
+        ans2=true 
+        while [ $ans2 == true ]; do 
+                echo -e " Would you like to repeat [y/n]? \c" 
+                read repeat 
+                case $repeat 
+                        in 
+                        y)ans2=false; ans=true;; 
+                        n)ans2=false; ans=false;; 
+                        *)ans2=true;; 
+                esac 
+        done 
+done 
