@@ -1,6 +1,13 @@
 #!/bin/bash 
 # Proj8 pt2 Discount 
  
+ function Quit?{
+  case $* 
+  	in 
+  	quit)exit;; 
+  esac
+ }
+ 
     ###### List Discount codes ######
 echo -e "\n\tPrice code \tDiscount Rate"u 
 echo -e "\th \t50%" 
@@ -16,10 +23,11 @@ while [ $ans == true ] ;do
         echo -e "\nEnter price of item: \c" 
         read item 
     ###### add option to exit ######
-         case $item 
-                in 
-                quit)exit;; 
-        esac 
+ 	Quit? ## testing function
+ #        case $item 
+  #              in 
+   #             quit)exit;; 
+    #    esac 
     ###### Data valadation ######
         while [[ $item =~ [a-z] ]] || [ -z $item ] ;do 
                 echo -e "'$item' is not a number!" 
