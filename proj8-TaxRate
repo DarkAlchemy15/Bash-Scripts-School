@@ -18,17 +18,17 @@ while [ $ans == true ] ;do
         #If you used command line parameters this will ask you for new input
         if [ $count -ge 2 ];then
                 echo -e "\nEnter tax percentage: \c"
-   		          read taxrate
-		        echo -e "Enter price for item 1: \c"
-		          read item1
-		        echo -e "Enter price for item 2: \c"
-		          read item2
-		        echo -e "Enter price for item 3: \c"
-		          read item3
-		        echo -e "Enter price for item 4: \c"
-		          read item4
-		        echo -e "Enter price for item 5: \c"
-		          read item5
+   		read taxrate
+		echo -e "Enter price for item 1: \c"
+		read item1
+		echo -e "Enter price for item 2: \c"
+		read item2
+		echo -e "Enter price for item 3: \c"
+		read item3
+		echo -e "Enter price for item 4: \c"
+		read item4
+		echo -e "Enter price for item 5: \c"
+		read item5
         elif [ $# -ge 2 ];then 
                 taxrate=$1 
                 item1=$2 
@@ -37,65 +37,65 @@ while [ $ans == true ] ;do
                 item4=$5 
                 item5=$6 
         else 
-                 echo -e "\nEnter tax percentage: \c" 
-                  read taxrate 
+                echo -e "\nEnter tax percentage: \c" 
+                read taxrate 
                 echo -e "Enter price for item 1: \c" 
-                  read item1 
+                read item1 
                 echo -e "Enter price for item 2: \c" 
-                  read item2 
+                read item2 
                 echo -e "Enter price for item 3: \c" 
-                  read item3 
+                read item3 
                 echo -e "Enter price for item 4: \c" 
-                  read item4 
+                read item4 
                 echo -e "Enter price for item 5: \c" 
-                  read item5 
+                read item5 
         fi 
  
         ###### Data Validation ###### 
         while [[ $taxrate =~ [a-z] ]];do
                 echo -e "'$taxrate' is not a number!"
                 echo -e "Please enter a number for Tax: \c"
-                  read taxrate
+                read taxrate
         done
         
         while  [[ $item1 =~ [a-z] ]] ;do
-		        echo -e "\n'$item1' is not a number!"
-		        echo -e "Please enter a number for item1: \c"
-		          read item1
-	    done
+		echo -e "\n'$item1' is not a number!"
+		echo -e "Please enter a number for item1: \c"
+		read item1
+	done
 
-	    while [[ $item2 =~ [a-z] ]];do
-		        echo -e "\n'$item2' is not a number!"
-		        echo -e "Please enter a number for item2: \c"
-		          read item2
-	    done
+	while [[ $item2 =~ [a-z] ]];do
+		echo -e "\n'$item2' is not a number!"
+		echo -e "Please enter a number for item2: \c"
+		read item2
+	done
 
-	   while [[ $item3 =~ [a-z] ]];do
-	        	echo -e "\n'$item3' is not a number!"
-		        echo -e "Please enter a number for item3: \c"
-		         read item3
-	    done
+	while [[ $item3 =~ [a-z] ]];do
+	       	echo -e "\n'$item3' is not a number!"
+	        echo -e "Please enter a number for item3: \c"
+	        read item3
+	done
 
-	    while [[ $item4 =~ [a-z] ]];do
-		        echo -e "\n'$item4 is not a number!"
-		        echo -e "Please enter a number for item4: \c"
-		         read item4
-	    done
+	while [[ $item4 =~ [a-z] ]];do
+	        echo -e "\n'$item4 is not a number!"
+	        echo -e "Please enter a number for item4: \c"
+	        read item4
+	done
 
-	    while [[ $item5 =~ [a-z] ]];do
-		        echo -e "\n'$item5' is not a number!"
-		        echo -e "Please enter a number for item5: \c"
-		         read item5
-	    done
+	while [[ $item5 =~ [a-z] ]];do
+	        echo -e "\n'$item5' is not a number!"
+	        echo -e "Please enter a number for item5: \c"
+	        read item5
+	done
         
         if [-z $taxrate ];then
 	        taxrate=0
-	    fi
-	    if [ -z $item1 ];then
-    		item1=0
-	    fi
+	fi
+	if [ -z $item1 ];then
+    	item1=0
+	fi
     	if [ -z $item2 ];then
-		    item2=0
+	    item2=0
 	    fi
 	    if [ -z $item3 ];then
 		    item3=0
