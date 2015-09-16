@@ -1,0 +1,70 @@
+#!/bin/bash
+# Proj5 Calculator
+
+	###### Input ######
+if [ $# -eq 2 ]
+  then 
+	echo -e "\nUsing command line paramaters:"
+	num1=$1
+	num2=$2
+  else
+	echo -e "Enter first number:\c " # Ashing for the first number
+	read num1
+	echo -e "Enter second number:\c" # Asking for the second number
+	read num2
+fi
+
+	###### Data Validation ######
+until [ $num1 -eq $num1 -a $num2 -eq $num2 -a ! -z $num1 -a  ! -z $num2 ] 2</dev/null 
+ do
+ 
+  until [ ! -z $num1 ] # Validating num1 wasn't left blank
+   do
+	echo -e "\nFirst number can't be blank: \c"
+	read num1
+   done
+
+  until [ ! -z $num2 ] # Validating num2 wasn't left blank
+   do
+	echo -e "\nSecond number can't be blank: \c"
+	read num2
+   done
+
+ until [ $num1 -eq $num1 ] 2</dev/null  # Validating that num1 is a number and not anything else
+   do
+	echo -e "'$num1' is not a number. Please enter a first number:\c"
+	read num1
+   done
+
+ until [ $num2 -eq $num2 ] 2>/dev/null # Validateing that num2 is a number and not anything else
+   do
+	echo -e "'$num2' is not a number. Please enter a second number:\c"
+	read num2
+   done	
+done
+
+    ########## Output ##########
+echo -e "num1: $num1" 
+echo -e "num2: $num2\n"
+
+	###### Sum ######
+echo -e "The sum is:"
+echo -e "$num1+$num2= $(echo "$num1+$num2" | bc)\n"
+	
+	###### Difference ######
+echo -e "The difference is:"
+echo -e "$num1-$num2= $(echo "$num1-$num2" | bc)\n"
+
+	###### Product ######
+echo -e "The product is:"
+echo -e "$num1"x"$num2= $(echo "$num1*$num2" | bc)\n"
+	
+	###### Quotient ######
+echo -e "The quotient is:"
+echo -e "$num1/$num2= $(echo "$num1/$num2" | bc)\n"
+	
+	###### Modulus ######
+echo -e "The modulus is:"
+echo -e "$num1%$num2= $(echo "$num1%$num2" | bc)\n"
+	
+echo "The End"
