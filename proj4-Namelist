@@ -1,0 +1,100 @@
+#!/bin/bash
+
+echo -e "\n$(tput setaf 4)#################################################################
+# Namelist will search for a specified name in a specified file #
+#   Input:                                                      #
+#	Keyname: This is what you want to search for.           #
+#	Filename: This is what to search in.                    #
+#   Output:                                                     #
+#	The number of time(s) the name occures in the file      #
+#   Ussage:                                                     #
+#	Interactive input or command line input                 #
+# $> ./namelist_proj4 [<keyname> <filename>]                    #
+#################################################################$(tput sgr 0)"
+
+filename=namelist.txt
+
+	###### Input ######
+if [ $# -gt 0 ]
+then
+    echo -e "\n\tUsing cmd paramaters: "
+	if [ $# -gt 1 ]
+		then
+			filename=$2
+	fi
+    keyname=$1
+else
+   echo -e "\n\tUsing interactive input: "
+   echo -e "\tEnter the keyname: \c"
+       read keyname
+   echo -e "\tEnter the filename: \c"
+       read filename
+fi
+
+
+	###### Data Validation ######
+while [ -z $keyname ] #This checks if the field was left blank
+do
+   echo -e "\n\t$(tput setaf 1)###### ERROR ######$(tput sgr 0)
+   \tKeyname field was left blank:\c"
+   read keyname
+done
+
+while [ ! -f $filename ] #This checks to see if the file exits
+do
+   echo -e "\n\t$(tput setaf 1)###### ERROR ######$(tput sgr 0)
+   \t'$filename' file does not exist."
+   echo -e "\tEnter a Valid filename:\c"
+   read filename
+done
+
+
+while [ -z $filename ] #This check if the field was left blank.
+do
+   echo -e "\n\t$(tput setaf 1)###### ERROR ######$(tput sgr 0)
+   \tFilename was left blank, please enter a filename:\c"	
+	read filename
+
+	if [ -z $filename ]
+	  then
+ 		echo -e "\tFilename was left blank would you like to use namelist.txt [y/n] \c "	
+		read YesOrNo
+		case "$YesOrNo"
+			in
+			y)filename=namelist.txt;;
+			n)echo -e "\n\t$(tput setaf 2)Then please enter a filename!!!!!!$(tput sgr 0)";;
+			*)echo -e "\n\t$(tput setaf 2)That wasn't an option. Try again!$(tput sgr 0)";;
+		esac
+	fi	    
+	while [ ! -f $filename ] #This checks to see if the file exits
+	 do
+   	    echo -e "\n\t$(tput setaf 1)###### ERROR ######$(tput sgr 0)
+	 '$filename' file does not exist."
+            echo -e "\tEnter a Valid filename:\c"
+            read filename
+        done
+
+done
+	##### End of Data Validation #####
+
+	
+	##### Output #####
+echo -e "\n\t keyname: $keyname" #Show entered Keyname 
+echo -e "\t filename: $filename\n" #Show entered Filename
+echo -e "    SearchName \t$filename "
+
+count=0 #Initialize count
+while read name
+do
+	###### compare #####
+  if [[ $name == $keyname ]] #Need double brackets or you get a "-bash: [: ==: unary operator expected" notice, when you use files other than namelist.txt.
+    then 
+	count=$(echo "$count+1" | bc) #Increment count
+ 	echo -e "\t$keyname $count $name"
+  fi 
+done <  $filename 
+
+echo -e "\n\t$(tput setaf 5)###### Namelist ######$(tput sgr 0)
+\tFound $count occurentce of $keyname in $filename."
+
+echo -e "\n\tThe End"
