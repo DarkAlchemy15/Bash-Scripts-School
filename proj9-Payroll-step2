@@ -1,0 +1,133 @@
+#!/bin/bash
+#Pay Roll step 2
+
+echo -e "\n###########################################################
+#Enter info:
+#$> <employee ID> <Fname> <Lname> <Rate> <Reg hrs> <OT hrs>
+#
+#type 'stop' anytime to stop entering names
+#
+###########################################################"
+
+Maybe(){
+case $emID
+        in
+        stop)break;;
+        quit)exit;;
+esac
+case $fname
+        in
+        stop)break;;
+        quit)exit;;
+esac
+case $lname
+        in
+        stop)break;;
+        quit)exit;;
+esac
+case $rate
+        in
+        stop)break;;
+        quit)exit;;
+esac
+case $reghr
+        in
+        stop)break;;
+        quit)exit;;
+esac
+case $othr
+        in
+        stop)break;;
+        quit)exit;;
+esac
+
+}
+
+check(){
+while [[ $rate =~ [a-Z] ]];do
+        echo -e "Payrate needs to be a number: \c "
+        read rate
+done
+while [[ $reghr =~ [a-Z] ]];do
+        echo -e " Regular hours needs to be a number: \c"
+        read reghr
+done
+while [[$othr =~ [a-Z] ]];do
+        echo -e "Overtime hours needs to be a number: \c"
+        read othr
+done
+}
+
+echo -e "Name file: \c"
+read filename
+
+if [ -z $filename ];then
+        filename="List_payroll_proj9.txt"
+fi
+echo -e "$(touch $filename)"
+
+count=0
+while true
+do
+
+        if [ $# -ge 4 ]; then
+                if [[ $3 =~ [a-Z] ]];then # This checks for a last name. If there is note then i t excludes it from the list.
+                        emID=$1
+                        fname=$2
+                        lname=$3
+                        rate=$4
+                        reghr=$5
+                        othr=$6
+                else
+                        emID=$1
+                        fname=$2
+                        rate=$3
+                        reghr=$4
+                        othr=$5
+                fi
+        else
+                echo -e "Enter EmployeeID: \c"
+                read emID
+                Maybe
+                echo -e "Enter Firstname Lastname: \c"
+                read fname lname
+                Maybe
+                echo -e "Enter pay rate: \c"
+                read rate
+                Maybe
+                check
+                echo -e "Enter regular hours: \c"
+                read reghr
+                Maybe
+                check
+                echo -e "Enter Overtime hours: \c"
+                read othr
+                Maybe
+                check
+        fi
+
+        if [ -z $lname ];then
+                echo -e "Last name was left blank."
+        fi
+
+        while [[ -z $othr ]];do
+                echo -e "\nOverTime was left blank so it was set to 0"
+                othr=0
+        done
+
+                ###### Calculate Pay ######
+        regpay=$(echo -e "scale=2;$rate*$reghr*1.00" | bc )
+        otpay=$(echo -e "scale=2;$rate*$othr*1.50" | bc )
+        total=$(echo -e "scale=2;$regpay+$otpay*1.00" | bc )
+        rate=$(echo -e "scale=2;$rate*1.00" | bc )
+
+                ###### Output ######
+        echo -e "\nEmployee ID: $emID  Name: $fname, $lname"
+        echo -e "Rate: \$$rate,   Regular pay: \$$regpay Overtime pay: \$$otpay"
+        echo -e "\t\tTotal: \$$total \n"
+
+        count=$(echo "$count+1" | bc )
+        echo "$count: $emID $fname $lname paycheck total: \$$total " >> $filename
+done
+
+cat $filename
