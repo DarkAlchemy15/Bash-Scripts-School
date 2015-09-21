@@ -1,0 +1,42 @@
+#!/bin/bash
+#Proj6 Fizz Buzz
+
+echo -e "\n	#####################################
+	# This program will list num 1-100. #
+	# Numbers that are evenly divisible #
+	# by 3 as Fizz, by 5 as Buzz and by #
+	# both as FizzBuzz.                 # 
+	#####################################"
+
+	###### Asking if you really want to run the script ######
+ans=true
+while [ $ans == true ] ;do
+	echo -e "\nWould you like to continue [y/n]: \c"
+	read input
+	case "$input"
+		in
+		y)ans=false;;
+		n)exit;;
+		*)ans=true;;
+	esac
+done
+
+	###### Dispalying num 1-100 and fizz Buzz when needed ######
+for (( num=1; num<=100 ; num++ ))
+  do
+	if [ `echo "scale=0; ${num} % 3" | bc` == 0 -a `echo "scale=0; ${num} % 5" |bc` == 0 ]
+	then 	
+		echo "FizzBuzz"
+	
+	elif [ `echo "scale=0; ${num} % 3" | bc` == 0 ]
+	then
+		echo "Fizz"
+	
+	elif [ `echo "scale=0; ${num} % 5" | bc` == 0 ]
+	then
+		echo "Buzz"
+	else
+		echo "$num"
+	fi
+  done
+echo -e "\tThat's All Folks" 
