@@ -1,12 +1,19 @@
 #!/bin/bash 
 # Proj8 pt2 Discount 
  
- function Quit?{
-  case $* 
-  	in 
-  	quit)exit;; 
-  esac
- }
+ echo -e "############################################################
+ # Discount script will calculate discount of an item based #
+ # on the discount code entered. This script will repeat    #
+ # until you type quit.                                     #
+ ############################################################"
+ 
+ 
+  #function Quit?{
+ # case $* 
+ # 	in 
+ # 	quit)exit;; 
+ # esac
+ #}
  
     ###### List Discount codes ######
 echo -e "\n\tPrice code \tDiscount Rate"u 
@@ -40,11 +47,15 @@ while [ $ans == true ] ;do
         done 
          echo -e "Enter discount code: \c" 
         read discount 
+        case $item 
+              in 
+              quit)exit;; 
+         esac
     ###### This was my first attempt for calculation, then i moved them to the case statment #####
 #off50=$(echo "$item-$item*.50" | bc ) 
-#off40=$(echo "$item-$item*.40" | bc) 
-#off33=$(echo "$item-$item*.33" | bc) 
-#off25=$(echo "$item-$item*.25" | bc) 
+#off40=$(echo "$item-$item*.40" | bc ) 
+#off33=$(echo "$item-$item*.33" | bc ) 
+#off25=$(echo "$item-$item*.25" | bc ) 
         
         ###### Data valadation w/ a quit option (Discount) ######
         while [[ ! $discount == [hftqz] ]] ; do 
