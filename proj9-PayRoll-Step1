@@ -1,29 +1,44 @@
 #!/bin/bash
-#Proj9 Payroll step1
+#Pay Roll step 1
 
-echo -e "###############
+echo -e "\n###########################################################
 Enter info:
-$> <enployee ID> <Fname> <Lname> <rate> <reg hrs> <OT hrs>
-#################################"
+$> <employee ID> <Fname> <Lname> <Rate> <Reg hrs> <OT hrs>
+###########################################################"
 
-if [ $# -ge 5 ];then
-    emID=$1
-    fname=$2
-    lname=$3
-    rate=$4
-    reghr=$5
-    othr=$6
+if [ $# -ge 4 ]; then
+        if [[ $3 =~ [a-z] ]];then # This checks for a last name. If there is note then i t excludes it from the list.
+                emID=$1
+                fname=$2
+                lname=$3
+                rate=$4
+                reghr=$5
+                othr=$6
+        else
+                emID=$1
+                fname=$2
+                rate=$3
+                reghr=$4
+                othr=$5
+        fi
 fi
 
-while [[ -z $othr ]] ;do
-    echo "'$othr' was left blank so it was set to 0"
-    othr=0
-done
-    ###### Calculate Pay ######
-regpay=$(echo -e "scale=2;$rate*$reghr" | bc )
-otpay=$(echo -e "scale=2;$rate*$othr*1.5 | bc )
-total=$(echo -e "scale=2;$regpay+$otpay" | bc )
+if [ -z $lname ];then
+        echo -e "Last name was left blank."
+fi
 
-    ###### Output ######
-echo -e "Employee ID: $emID   Name: $lname, $fname"
-echo -e "Rate: \$$rate,  Regular pay: \$$regpay,  Overtime pay: \$$otpay,  Total: $total"
+while [[ -z $othr ]];do
+        echo -e "\nOverTime was left blank so it was set to 0"
+        othr=0
+done
+
+        ###### Calculate Pay ######
+regpay=$(echo -e "scale=2;$rate*$reghr*1.00" | bc )
+otpay=$(echo -e "scale=2;$rate*$othr*1.50" | bc )
+total=$(echo -e "scale=2;$regpay+$otpay*1.00" | bc )
+rate=$(echo -e "scale=2;$rate*1.00" | bc )
+
+        ###### Output ######
+echo -e "\nEmployee ID: $emID  Name: $fname, $lname"
+echo -e "Rate: \$$rate,   Regular pay: \$$regpay Overtime pay: \$$otpay"
+echo -e "\t\tTotal: \$$total \n"
