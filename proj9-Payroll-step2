@@ -1,13 +1,21 @@
 #!/bin/bash
-#Pay Roll step 2
+# Pay Roll step 1
 
-echo -e "\n###########################################################
-#Enter info:
-#$> <employee ID> <Fname> <Lname> <Rate> <Reg hrs> <OT hrs>
-#
-#type 'stop' anytime to stop entering names
-#
-###########################################################"
+echo -e "\n########################################################################
+#                                                                       #
+# This script will allow you to enter payroll information for multiple  #
+# employees. It will do the calculation and write the info to a file    #
+# It will then display the contents of the file.                        #
+#                                                                       #
+# Usage:                                                                #
+#       Interactive mode:                                               #
+#       Commandline Parameters:                                         #
+#$> <employee ID> <Fname> <Lname> <Rate> <Reg hrs> <OT hrs>             #
+#                                                                       #
+# To stop entering entering names type stop at anytime.                 #
+# To exit the script completely type quit at anytime.                   #
+#                                                                       #
+#########################################################################"
 
 Maybe(){
 case $emID
@@ -52,13 +60,14 @@ while [[ $reghr =~ [a-Z] ]];do
         echo -e " Regular hours needs to be a number: \c"
         read reghr
 done
-while [[$othr =~ [a-Z] ]];do
+while [[ $othr =~ [a-Z] ]];do
         echo -e "Overtime hours needs to be a number: \c"
         read othr
 done
 }
 
-echo -e "Name file: \c"
+echo -e "\nThe default file name is "List_payroll_proj9.txt""
+echo -e "Choose a filename: \c"
 read filename
 
 if [ -z $filename ];then
@@ -67,11 +76,34 @@ fi
 echo -e "$(touch $filename)"
 
 count=0
+clear_var=0
 while true
 do
 
-        if [ $# -ge 4 ]; then
-                if [[ $3 =~ [a-Z] ]];then # This checks for a last name. If there is note then i t excludes it from the list.
+        ######### This line clears the varibles entered as command line parameters during the 2second loop ######
+        if [ $clear_var -ge 1 ] ;then
+
+                echo -e "Enter EmployeeID: \c"
+                read emID
+                Maybe
+                echo -e "Enter Firstname Lastname: \c"
+                read fname lname
+                Maybe
+                echo -e "Enter pay rate: \c"
+                read rate
+                Maybe
+                check
+                echo -e "Enter regular hours: \c"
+                read reghr
+                Maybe
+                check
+                echo -e "Enter Overtime hours: \c"
+                read othr
+                Maybe
+                check
+
+        elif [ $# -ge 4 ]; then
+                if [[ $3 =~ [a-Z] ]];then # This checks for a last name. If there is no last name then it excludes it from the list.
                         emID=$1
                         fname=$2
                         lname=$3
@@ -126,6 +158,7 @@ do
         echo -e "Rate: \$$rate,   Regular pay: \$$regpay Overtime pay: \$$otpay"
         echo -e "\t\tTotal: \$$total \n"
 
+        clear_var=$(echo "$clear_var+1" | bc )
         count=$(echo "$count+1" | bc )
         echo "$count: $emID $fname $lname paycheck total: \$$total " >> $filename
 done
