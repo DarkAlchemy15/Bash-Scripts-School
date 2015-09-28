@@ -52,19 +52,33 @@ esac
 }
 
 check(){
-while [[ $rate =~ [a-Z] ]];do
+while [[ $emID =~ [a-Z] ]] || [[ -z $emID ]]; do
+        echo -e "\n$(tput setaf 1)##### ERROR #####$(tput sgr 0)"
+        echo -e "Employee ID needs to be a number: \c"
+        read emID
+done
+while [[ -z $fname ]]; do
+        echo -e "\n$(tput setaf 1)##### ERROR #####$(tput sgr 0)"
+        echo -e "Firstname can't be left blank: \c"
+        read fname
+done
+while [[ $rate =~ [a-Z] ]] || [[ -z $rate ]];do
+        echo -e "\n$(tput setaf 1)##### ERROR #####$(tput sgr 0)"
         echo -e "Payrate needs to be a number: \c "
         read rate
 done
-while [[ $reghr =~ [a-Z] ]];do
-        echo -e " Regular hours needs to be a number: \c"
+while [[ $reghr =~ [a-Z] ]] || [[ -z $reghr ]];do
+        echo -e "\n$(tput setaf 1)##### ERROR #####$(tput sgr 0)"
+        echo -e "Regular hours needs to be a number: \c"
         read reghr
 done
-while [[ $othr =~ [a-Z] ]];do
+while [[ $othr =~ [a-Z] ]] || [[ -z $othr ]];do
+        echo -e "\n$(tput setaf 1)##### ERROR #####$(tput sgr 0)"
         echo -e "Overtime hours needs to be a number: \c"
         read othr
 done
 }
+
 
 echo -e "\nThe default file name is "List_payroll_proj9.txt""
 echo -e "Choose a filename: \c"
