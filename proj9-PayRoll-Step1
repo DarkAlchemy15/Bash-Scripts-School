@@ -2,9 +2,44 @@
 #Pay Roll step 1
 
 echo -e "\n###########################################################
+Ussage:
+        
 Enter info:
-$> <employee ID> <Fname> <Lname> <Rate> <Reg hrs> <OT hrs>
+$> payroll_step1 <employee ID> <Fname> [Lname] <Rate> <Reg hrs> <OT hrs>
+
+ex:
+$> payroll_step1 007 James Bond 14.38 40 3
+or
+$> payroll_step1 007 James 14.38 40 3
 ###########################################################"
+
+check(){
+while [[ $emID =~ [a-Z] ]] || [[ -z $emID ]]; do
+        echo -e "\n$(tput setaf 1)##### ERROR #####$(tput sgr 0)"
+        echo -e "Employee ID needs to be a number: \c"
+        read emID
+done
+while [[ -z $fname ]]; do
+        echo -e "\n$(tput setaf 1)##### ERROR #####$(tput sgr 0)"
+        echo -e "Firstname can't be left blank: \c"
+        read fname
+done
+while [[ $rate =~ [a-Z] ]] || [[ -z $rate ]];do
+        echo -e "\n$(tput setaf 1)##### ERROR #####$(tput sgr 0)"
+        echo -e "Payrate needs to be a number: \c "
+        read rate
+done
+while [[ $reghr =~ [a-Z] ]] || [[ -z $reghr ]];do
+        echo -e "\n$(tput setaf 1)##### ERROR #####$(tput sgr 0)"
+        echo -e "Regular hours needs to be a number: \c"
+        read reghr
+done
+while [[ $othr =~ [a-Z] ]] || [[ -z $othr ]];do
+        echo -e "\n$(tput setaf 1)##### ERROR #####$(tput sgr 0)"
+        echo -e "Overtime hours needs to be a number: \c"
+        read othr
+done
+}
 
 if [ $# -ge 4 ]; then
         if [[ $3 =~ [a-z] ]];then # This checks for a last name. If there is note then i t excludes it from the list.
@@ -26,12 +61,7 @@ fi
 if [ -z $lname ];then
         echo -e "Last name was left blank."
 fi
-
-while [[ -z $othr ]];do
-        echo -e "\nOverTime was left blank so it was set to 0"
-        othr=0
-done
-
+check
         ###### Calculate Pay ######
 regpay=$(echo -e "scale=2;$rate*$reghr*1.00" | bc )
 otpay=$(echo -e "scale=2;$rate*$othr*1.50" | bc )
