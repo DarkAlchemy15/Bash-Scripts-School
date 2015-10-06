@@ -1,21 +1,26 @@
 #!/bin/bash
-# Pay Roll step 1
+#Andrew Lovato Pay Roll step 1
 
-echo -e "\n########################################################################
+echo -e "\n#####################################################################                                   ###
 #                                                                       #
 # This script will allow you to enter payroll information for multiple  #
-# employees. It will do the calculation and write the info to a file    #
-# It will then display the contents of the file.                        #
+# employees. It will do the calculation and write the info to a file.   #
+# It will display the contents of the file, when all employees have     #
+# entered.                                                              #
 #                                                                       #
 # Usage:                                                                #
 #       Interactive mode:                                               #
+# Enter the employee information one line at a time:                    #
+#                                                                       #
 #       Commandline Parameters:                                         #
-#$> <employee ID> <Fname> <Lname> <Rate> <Reg hrs> <OT hrs>             #
+#$> <employee ID> <Fname> [Lname] <Rate> <Reg hrs> <OT hrs>             #
 #                                                                       #
 # To stop entering entering names type stop at anytime.                 #
 # To exit the script completely type quit at anytime.                   #
 #                                                                       #
 #########################################################################"
+
+        ################ Using functions for Data validation #################
 
 Maybe(){
 case $emID
@@ -48,7 +53,6 @@ case $othr
         stop)break;;
         quit)exit;;
 esac
-
 }
 
 check(){
@@ -56,63 +60,57 @@ while [[ $emID =~ [a-Z] ]] || [[ -z $emID ]]; do
         echo -e "\n$(tput setaf 1)##### ERROR #####$(tput sgr 0)"
         echo -e "Employee ID needs to be a number: \c"
         read emID
+        Maybe
 done
 while [[ -z $fname ]]; do
         echo -e "\n$(tput setaf 1)##### ERROR #####$(tput sgr 0)"
         echo -e "Firstname can't be left blank: \c"
         read fname
+        Maybe
 done
 while [[ $rate =~ [a-Z] ]] || [[ -z $rate ]];do
         echo -e "\n$(tput setaf 1)##### ERROR #####$(tput sgr 0)"
         echo -e "Payrate needs to be a number: \c "
         read rate
+        Maybe
 done
 while [[ $reghr =~ [a-Z] ]] || [[ -z $reghr ]];do
         echo -e "\n$(tput setaf 1)##### ERROR #####$(tput sgr 0)"
         echo -e "Regular hours needs to be a number: \c"
         read reghr
+        Maybe
 done
 while [[ $othr =~ [a-Z] ]] || [[ -z $othr ]];do
         echo -e "\n$(tput setaf 1)##### ERROR #####$(tput sgr 0)"
         echo -e "Overtime hours needs to be a number: \c"
         read othr
+        Maybe
 done
 }
 
+        ############### End of functions ###################
 
-echo -e "\nThe default file name is "List_payroll_proj9.txt""
-echo -e "Choose a filename: \c"
-read filename
+echo -e "\nThe default file name is "List_payroll_proj9b.txt""
+#echo -e "Choose a filename: \c"
+#read filename
 
-if [ -z $filename ];then
-        filename="List_payroll_proj9.txt"
-fi
+#if [ -z $filename ];then
+        filename="List_payroll_proj9b.txt"
+#fi
+
 echo -e "$(touch $filename)"
 
 count=0
 clear_var=0
+total_payroll=0
+
 while true
 do
 
         ######### This line clears the varibles entered as command line parameters during the 2second loop ######
         if [ $clear_var -ge 1 ] ;then
-
-                echo -e "Enter EmployeeID: \c"
-                read emID
-                Maybe
-                echo -e "Enter Firstname Lastname: \c"
-                read fname lname
-                Maybe
-                echo -e "Enter pay rate: \c"
-                read rate
-                Maybe
-                check
-                echo -e "Enter regular hours: \c"
-                read reghr
-                Maybe
-                check
-                echo -e "Enter Overtime hours: \c"
-                read othr
+                echo -e "Enter employee record: \c"
+                read emID fname lname rate reghr othr
                 Maybe
                 check
 
@@ -124,12 +122,16 @@ do
                         rate=$4
                         reghr=$5
                         othr=$6
+                        Maybe
+                        check
                 else
                         emID=$1
                         fname=$2
                         rate=$3
                         reghr=$4
                         othr=$5
+                        Maybe
+                        check
                 fi
         else
                 echo -e "Enter EmployeeID: \c"
@@ -141,11 +143,9 @@ do
                 echo -e "Enter pay rate: \c"
                 read rate
                 Maybe
-                check
                 echo -e "Enter regular hours: \c"
                 read reghr
                 Maybe
-                check
                 echo -e "Enter Overtime hours: \c"
                 read othr
                 Maybe
@@ -166,15 +166,17 @@ do
         otpay=$(echo -e "scale=2;$rate*$othr*1.50" | bc )
         total=$(echo -e "scale=2;$regpay+$otpay*1.00" | bc )
         rate=$(echo -e "scale=2;$rate*1.00" | bc )
-
+        total_payroll=$(echo -e "scale=2;$total_payroll+$total" | bc )
                 ###### Output ######
         echo -e "\nEmployee ID: $emID  Name: $fname, $lname"
         echo -e "Rate: \$$rate,   Regular pay: \$$regpay Overtime pay: \$$otpay"
-        echo -e "\t\tTotal: \$$total \n"
+        echo -e "\t\tTotal: \$$total "
+        echo -e "\t\tCulimitve Payroll: \$$total_payroll \n"
 
         clear_var=$(echo "$clear_var+1" | bc )
         count=$(echo "$count+1" | bc )
-        echo "$count: $emID $fname $lname paycheck total: \$$total " >> $filename
+        echo "$count: $emID $fname $lname paycheck total: \$$total
+                                Culimitive Payroll: \$$total_payroll" >> $filename
 done
-
+echo -e "\n"
 cat $filename
