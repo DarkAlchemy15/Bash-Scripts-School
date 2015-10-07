@@ -1,0 +1,178 @@
+#!/bin/bash
+#Andrew Lovato Pay Roll step 1
+
+echo -e "\n########################################################################
+#                                                                       #
+# This script will allow you to enter payroll information for multiple  #
+# employees. It will do the calculation and write the info to a file.   #
+# It will display the contents of the file, when all employees have     #
+# entered.                                                              #
+#                                                                       #
+# Usage:                                                                #
+#       Commandline Parameters:                                         #
+#$> <employee ID> <Fname> <Lname> <Rate> <Reg hrs> <OT hrs>             #
+#                                                                       #
+# To stop entering entering names type stop at anytime.                 #
+# To exit the script completely type quit at anytime.                   #
+#                                                                       #
+#########################################################################"
+
+        ################ Using functions for Everything! #################
+
+Maybe(){
+case $emID
+        in
+        stop)break;;
+        quit)exit;;
+esac
+case $fname
+        in
+        stop)break;;
+        quit)exit;;
+esac
+case $lname
+        in
+        stop)break;;
+        quit)exit;;
+esac
+case $rate
+        in
+        stop)break;;
+        quit)exit;;
+esac
+case $reghr
+        in
+        stop)break;;
+        quit)exit;;
+esac
+case $othr
+        in
+        stop)break;;
+        quit)exit;;
+esac
+}
+
+Check(){
+while [[ $emID =~ [a-Z] ]] || [[ -z $emID ]]; do
+        echo -e "\n$(tput setaf 1)##### ERROR #####$(tput sgr 0)"
+        echo -e "Employee ID needs to be a number: \c"
+        read emID
+        Maybe
+done
+while [[ -z $fname ]]; do
+        echo -e "\n$(tput setaf 1)##### ERROR #####$(tput sgr 0)"
+        echo -e "Firstname can't be left blank: \c"
+        read fname
+        Maybe
+done
+while [[ $rate =~ [a-Z] ]] || [[ -z $rate ]];do
+        echo -e "\n$(tput setaf 1)##### ERROR #####$(tput sgr 0)"
+        echo -e "Payrate needs to be a number: \c "
+        read rate
+        Maybe
+done
+while [[ $reghr =~ [a-Z] ]] || [[ -z $reghr ]];do
+        echo -e "\n$(tput setaf 1)##### ERROR #####$(tput sgr 0)"
+        echo -e "Regular hours needs to be a number: \c"
+        read reghr
+        Maybe
+done
+while [[ $othr =~ [a-Z] ]] || [[ -z $othr ]];do
+        echo -e "\n$(tput setaf 1)##### ERROR #####$(tput sgr 0)"
+        echo -e "Overtime hours needs to be a number: \c"
+        read othr
+        Maybe
+done
+}
+
+
+Calc(){
+                ###### Calculate Pay ######
+        regpay=$(echo -e "scale=2;$rate*$reghr*1.00" | bc )
+        otpay=$(echo -e "scale=2;$rate*$othr*1.50" | bc )
+        total=$(echo -e "scale=2;$regpay+$otpay*1.00" | bc )
+        rate=$(echo -e "scale=2;$rate*1.00" | bc )
+        total_payroll=$(echo -e "scale=2;$total_payroll+$total" | bc )
+}
+
+Output(){
+                ###### Output ######
+        echo -e "\nEmployee ID: $emID  Name: $fname, $lname"
+        echo -e "Rate: \$$rate,   Regular pay: \$$regpay Overtime pay: \$$otpay"
+        echo -e "\t\tTotal: \$$total "
+        echo -e "\t\tCulimitve Payroll: \$$total_payroll \n"
+
+        clear_var=$(echo "$clear_var+1" | bc )
+        count=$(echo "$count+1" | bc )
+        echo "$count: $emID $lname $fname \$$rate $reghr $othr \$$otpay \$$regpay \$$total" | awk '{printf "%1s %5s%13s, %-9s%10s%10s%10s%10s%10s%10s\n", $1, $2, $3, $4, $5, $6, $7, $8, $9, $10 }' >> $output_file
+}
+
+
+        ############### End of functions ###################
+
+echo -e "\nThe default file name is "List_payroll_proj9d.txt""
+output_file="List_payroll_proj9d.txt"
+
+echo -e "$(touch $output_file)"
+echo -e "# Emp# Lname   Fname Rate Hrs OT OTpay RegPay Total" | awk '{printf  "%1s %5s%13s, %-9s%10s%10s%10s%10s%10s%10s\n", $1, $2, $3, $4, $5, $6, $7, $8, $9, $10}' >> $output_file
+
+
+count=0
+clear_var=0
+total_payroll=0
+if [[ -f $# ]]; then
+        input_file=$1
+        while read emID fname lname rate reghr othr
+        do
+                Maybe
+                Check
+                Calc
+                Output
+        done < $input_file
+else
+        echo -e "Would you like to read from a file [y/n]? \c"
+        read ans
+
+        case $ans
+                in
+                stop)break;;
+                quit)exit;;
+        esac
+
+        until [[ $ans == y ]] || [[ $ans == n ]] ;do
+
+                echo -e "\nPlease enter a lowercase 'y' or 'n'."
+                echo -e "Would you like to read from a file [y/n]? \c"
+                read ans
+        done
+
+        if [[ $ans == y ]] ;then
+
+                echo -e "Please enter filename: \c"
+                read input_file
+
+                while read emID fname lname rate reghr othr
+                do
+                        Maybe
+                        Check
+                        Calc
+                        Output
+                done < $input_file
+        else
+                while true
+                do
+                        echo -e "Enter employee record: \c"
+                        read emID fname lname rate reghr othr
+                        Maybe
+                        Check
+                        Calc
+                        Output
+                done
+        fi
+fi
+echo -e "Total Payroll:  \$$total_payroll" | awk '{printf "\n%75s %1s %8s\n", $1, $2, $3}' >> $output_file
+#echo -e "\n\t\t\t\t\t\t\t\t Total Payroll:  \$$total_payroll \n" >> $output_file
+echo -e "\n"
+
+cat $output_file
+mv $output_file Payroll_List_Formatted_$(date +%F_%H%M)
