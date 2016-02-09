@@ -1,0 +1,24 @@
+#!/bin/bash
+
+#Pushing file to hosts
+
+check_file(){
+if [[ $yes == y ]];then
+        ans=false
+fi
+}
+ans=true
+while [ $ans == true ] ;do
+        echo -e "\nEnter file location: \c"
+                read file
+        echo -e "Is this correct? \n$file [y/n] \c"
+                read yes
+                check_file
+done
+
+while true ;do
+        echo -e "Enter host ip: \c"
+                read hostip
+        ssh root@$hostip "mv /etc/hosts /etc/hosts_bu && echo "Host file has been renamed" "
+        scp -p $file root@$hostip:/etc/
+done
