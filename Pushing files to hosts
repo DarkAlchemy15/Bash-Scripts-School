@@ -9,16 +9,34 @@ fi
 }
 ans=true
 while [ $ans == true ] ;do
-        echo -e "\nEnter file location: \c"
+        echo -e "\n(Absolute path please)\nEnter file  to copy: \c"
                 read file
         echo -e "Is this correct? \n$file [y/n] \c"
                 read yes
                 check_file
 done
 
-while true ;do
-        echo -e "Enter host ip: \c"
-                read hostip
+ans=true
+while [ $ans == true ] ;do
+        echo -e "\nPlease enter the list of IPs(txt file): \c"
+                read list
+        echo -e "Is this correct? \n$list [y/n] \c"
+                read yes
+                check_file
+done
+
+#if [[ -z $list ]] ;then
+#       echo -e "Enter host ip: \c"
+#               read hostip
+#       ssh root@$hostip "mv /etc/hosts /etc/hosts_bu && echo "Host file has been renamed" "
+#       scp -p $file root@$hostip:/etc/
+#else
+
+while read hostip
+do
         ssh root@$hostip "mv /etc/hosts /etc/hosts_bu && echo "Host file has been renamed" "
         scp -p $file root@$hostip:/etc/
-done
+        echo -e "$hostip has been completed."
+done <  $list
+
+#fi
