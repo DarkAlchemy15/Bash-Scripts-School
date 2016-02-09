@@ -1,6 +1,14 @@
-!/bin/bash
+#!/bin/bash
 
-check_hostip(){
+checkfile(){
+        ##### Checks to see if file exist #####
+while [[ ! -f $list ]] ;do
+        echo -e "\nFile $list doesn't exit!\nPlease enter file with IP list: \c"
+        read list
+done
+}
+
+maybe(){
 case $hostip
         in
         stop)break;;
@@ -8,20 +16,22 @@ case $hostip
 esac
 }
 
-check(){
-while [[ -z $hostip ]] ;do
-        echo -e "Please enter a IP: \c"
-        read hostip
-done
-}
+list=$1
 
         ##### Pulling host file from host #####
-while true ;do
-        echo -e "\nEnter host IP address: \c"
+if [ -z $list ] ;then
+
+        while true
+        do
+                echo -e "\nEnter host IP address: \c"
                 read hostip
-                check_hostip
-                check
+                maybe
 
-        scp -p root@$hostip:/etc/hosts ~/host-$hostip
+                scp -p root@$hostip:/etc/hosts ~/$hostip
 
-done
+        done
+else
+        while read hostip ;do
+                scp -p root@$hostip:/etc/hosts ~/host-$hostip
+        done < $list
+fi
