@@ -1,42 +1,51 @@
-#!/bin/bash
+#!/bin/bash -x
 
 #Pushing file to hosts
 
-check_file(){
-if [[ $yes == y ]];then
-        ans=false
-fi
+checkfile(){
+while [[ ! -e $list ]]; do
+        echo -e "\nFile $list doesn't exitst"
+        echo -e "Pleas enter the list of IP(txt file): \c"
+                read list
+done
 }
-ans=true
-while [ $ans == true ] ;do
+
+
+if [ $# -eq 0 ]; then
+
+echo -e " #####################################################
+#                                                     #
+# This script will push a selected file to hosts      #
+#                                                     #
+# Ussage:                                             #
+# $> . <script> <File to copy> <a file with host ips> #
+# or                                                  #
+# $> . <scrip> #Use the interactive mode              #
+#                                                     #
+#######################################################"
+
+        read -p "Press any key to continue"
+
         echo -e "\n(Absolute path please)\nEnter file  to copy: \c"
                 read file
-        echo -e "Is this correct? \n$file [y/n] \c"
-                read yes
-                check_file
-done
+        #file=/etc/hosts      # This was for testing
 
-ans=true
-while [ $ans == true ] ;do
-        echo -e "\nPlease enter the list of IPs(txt file): \c"
+        echo -e "\nPlease enter  list of IPs(txt file): \c"
                 read list
-        echo -e "Is this correct? \n$list [y/n] \c"
-                read yes
-                check_file
-done
+                checkfile
+        #list=test2          # This was for testing
 
-#if [[ -z $list ]] ;then
-#       echo -e "Enter host ip: \c"
-#               read hostip
-#       ssh root@$hostip "mv /etc/hosts /etc/hosts_bu && echo "Host file has been renamed" "
-#       scp -p $file root@$hostip:/etc/
-#else
+else
+        file=$1
+        list=$2
+        checkfile
+fi
+
 
 while read hostip
 do
-        ssh -n root@$hostip "mv /etc/hosts /etc/hosts_bu && echo "Host file has been renamed" "  #Re-naming the original so it doesn't get over writtern
-        scp -p $file root@$hostip:/etc/  # Pushing out the file to the host
-        echo -e "\t\t(tput setaf1)$hostip has been completed.(tput sgr0)" # just because i can 
-done <  $list
+        ssh -n $hostip "mv /etc/hosts /etc/hosts_bu && echo "$HOSTNAME - Host file has been renamed" "
+        scp -p $file root@$hostip:/etc/
+        echo -e "$hostip has been completed." >> completed_host
 
-#fi
+done < $list
