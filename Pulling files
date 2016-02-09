@@ -16,6 +16,43 @@ case $hostip
 esac
 }
 
+cont(){
+case $ans
+        in
+        n)exit;;
+        N)exit;;
+esac
+
+case $hostip
+        in
+        quit)exit;;
+        stop)exit;;
+        exit)exit;;
+esac
+}
+
+
+if [ $# -eq 0 ]; then
+
+echo -e "\n########################################################
+#                                                      #
+# Usage:                                               #
+# This script will read a list of IPs from a txt file  #
+# and copy down the hosts files to your local machine. #
+#                                                      #
+# cmd line parameters:                                 #
+#   >$ ./pullfile.sh <IP-list.txt>                     #
+# or                                                   #
+# Interactive mode:                                    #
+#   >$ ./pullfile.sh                                   #
+#                                                      #
+########################################################"
+
+        echo -e "\nWould you like to continue? [y/n] \c"
+        read ans
+        cont
+fi
+
 list=$1
 
         ##### Pulling host file from host #####
