@@ -1,0 +1,22 @@
+#!/bin/sh
+#This script will make diliverable for PBille's class
+
+	####### Input #######
+echo -e "\nWhat is your name:\c"
+read name
+echo -e "Project name:\c"
+read Pname
+echo -e "Project number: \c"
+read number
+echo -e "Script filepath:\c"
+read file
+
+	######## Export variables ########
+# This lets you pass variables between shells
+export name
+export Pname
+export number
+export file
+
+	######## Starting Script ########
+script proj_$number.txt -c "figlet $name $Pname Proj $number; finger $name;$file
