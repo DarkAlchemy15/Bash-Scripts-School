@@ -1,0 +1,27 @@
+!/bin/bash
+
+check_hostip(){
+case $hostip
+        in
+        stop)break;;
+        quit)exit;;
+esac
+}
+
+check(){
+while [[ -z $hostip ]] ;do
+        echo -e "Please enter a IP: \c"
+        read hostip
+done
+}
+
+        ##### Pulling host file from host #####
+while true ;do
+        echo -e "\nEnter host IP address: \c"
+                read hostip
+                check_hostip
+                check
+
+        scp -p root@$hostip:/etc/hosts ~/host-$hostip
+
+done
