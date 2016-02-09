@@ -34,7 +34,7 @@ done
 
 while read hostip
 do
-        ssh root@$hostip "mv /etc/hosts /etc/hosts_bu && echo "Host file has been renamed" "  #Re-naming the original so it doesn't get over writtern
+        ssh -n root@$hostip "mv /etc/hosts /etc/hosts_bu && echo "Host file has been renamed" "  #Re-naming the original so it doesn't get over writtern
         scp -p $file root@$hostip:/etc/  # Pushing out the file to the host
         echo -e "\t\t(tput setaf1)$hostip has been completed.(tput sgr0)" # just because i can 
 done <  $list
