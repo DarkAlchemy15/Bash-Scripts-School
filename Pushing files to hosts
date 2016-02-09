@@ -17,8 +17,10 @@ echo -e " #####################################################
 #                                                     #
 # This script will push a selected file to hosts      #
 #                                                     #
-# Ussage:                                             #
-# $> . <script> <File to copy> <a file with host ips> #
+# Usage:                                              #
+# $> . <script> <a file with host ips> <file to copy> #
+#            If file to copy is blank it will default #
+#     to the hosts file (/etc/hosts)                  #
 # or                                                  #
 # $> . <scrip> #Use the interactive mode              #
 #                                                     #
@@ -34,6 +36,11 @@ echo -e " #####################################################
                 read list
                 checkfile
         #list=test2          # This was for testing
+
+elif [ $# -eq 1 ]; then
+        file=/etc/hosts
+        list=$1
+        checkfile
 
 else
         file=$1
