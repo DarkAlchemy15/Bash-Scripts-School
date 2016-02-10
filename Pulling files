@@ -65,10 +65,12 @@ if [ -z $list ] ;then
                 maybe
 
                 scp -p root@$hostip:/etc/hosts ~/$hostip
+                echo -e "\nhost-$hostip was created.\n"
 
         done
 else
         while read hostip ;do
                 scp -p root@$hostip:/etc/hosts ~/host-$hostip
+                echo -e "\nhost-$hostip was created.\n"
         done < $list
 fi
