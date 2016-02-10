@@ -11,7 +11,7 @@ done
 }
 
 
-if [ $# -eq 0 ]; then
+if [ -z $1 ]; then
 
 echo -e " #####################################################
 #                                                     #
@@ -43,8 +43,8 @@ elif [ $# -eq 1 ]; then
         checkfile
 
 else
-        file=$1
-        list=$2
+        file=$2
+        list=$1
         checkfile
 fi
 
