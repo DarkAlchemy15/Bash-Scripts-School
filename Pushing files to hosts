@@ -51,7 +51,7 @@ fi
 
 while read hostip
 do
-        ssh -n $hostip "mv /etc/hosts /etc/hosts_bu && echo "$HOSTNAME - Host file has been renamed" "
+        ssh -n $hostip "cp -p /etc/hosts /etc/hosts_bu && echo "$HOSTNAME - Host file has been renamed" "
         scp -p $file root@$hostip:/etc/
         echo -e "$hostip has been completed." >> completed_host
 
